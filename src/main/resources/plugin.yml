@@ -1,0 +1,4 @@
+name: gameStart
+version: '${version}'
+main: plugin.gamestart.GameStart
+api-version: '1.20'

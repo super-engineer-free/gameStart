@@ -3,12 +3,7 @@ public class Difficulty {
 
 
 
-  EASY("easy", 15, 1, 3),
-  NORMAL("normal", 60, 3, 15),
-  HARD("hard", 120, 5, 35),
 
-  NONE("none",0,0,0) {
-  }
 
 
   private final String difficulty;

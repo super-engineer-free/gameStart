@@ -1,4 +1,6 @@
 name: gameStart
 version: '${version}'
-main: plugin.gamestart.GameStart
+main: plugin.gamest art.GameStart
 api-version: '1.20'
+commands:
+  gameStart:

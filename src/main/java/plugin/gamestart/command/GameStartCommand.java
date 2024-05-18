@@ -19,6 +19,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import plugin.gamestart.PlayerScoreData;
 import plugin.gamestart.data.ExecutingPlayer;
+import plugin.gamestart.data.PlayerScore;
 
 /**
  * 制限時間内にペアとなるエンティティを見つけて、スコアを獲得するゲームを起動するコマンドです。
@@ -34,7 +35,7 @@ public class GameStartCommand extends BaseCommand implements Listener {
   private final List<GameEntityInfo> gameEntityInfoList = new ArrayList<>();
   private final List<Integer> getPairIdList = new ArrayList<>();
   private final List<Integer> getEntityIdList = new ArrayList<Integer>();
-  private List<Entity> entityList = new ArrayList<>();
+  private final List<Entity> entityList = new ArrayList<>();
   private final PlayerScoreData playerScoreData = new PlayerScoreData();
   private ExecutingPlayer nowPlayer;
 
@@ -85,8 +86,7 @@ public class GameStartCommand extends BaseCommand implements Listener {
           + playerScore.getPlayerName() + " | "
           + playerScore.getDifficulty() + " | "
           + playerScore.getScore() + " | "
-          + playerScore.getRegisteredDt()
-          .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+          + playerScore.getRegisteredDt());
     }
   }
 
@@ -108,16 +108,8 @@ public class GameStartCommand extends BaseCommand implements Listener {
    * @return ゲーム難易度
    */
   public Difficulty checkDifficulty(Player player, String[] args) {
-    if (args.length == 1 &&
-        (Difficulty.EASY.preparedDifficulty().equals(args[0]) ||
-            Difficulty.NORMAL.preparedDifficulty().equals(args[0]) ||
-            Difficulty.HARD.preparedDifficulty().equals(args[0]))) {
-
-      return receiveDifficulty(args);
-
-    }
     player.sendMessage("引数の入力に誤りがあります。「easy」,「normal」,「hard」のいずれかを入力してください");
-    return Difficulty.NONE;
+    return Difficulty.NORMAL;
   }
 
   /**
@@ -127,11 +119,10 @@ public class GameStartCommand extends BaseCommand implements Listener {
    * @return ゲーム難易度
    */
   private Difficulty receiveDifficulty(String[] args) {
-    Difficulty receiveDifficulty = Arrays.stream(Difficulty.values())
-        .filter(p -> p.preparedDifficulty().equals(args[0]))
+    return Arrays.stream(Difficulty.values())
+        .filter(p -> false)
         .findFirst()
-        .orElse(Difficulty.NONE);
-    return receiveDifficulty;
+        .orElse(Difficulty.NORMAL);
   }
 
 
@@ -147,7 +138,7 @@ public class GameStartCommand extends BaseCommand implements Listener {
 
     GeneratePairs generatePairs = new GeneratePairs(isDifficulty);
 
-    while (!generatePairs.locationDummyList.isEmpty() && generatePairs.idDummyList.size() > 0) {
+    while (!generatePairs.locationDummyList.isEmpty() && !generatePairs.idDummyList.isEmpty()) {
 
       generatePairs.selectNumber();
 
@@ -203,7 +194,7 @@ public class GameStartCommand extends BaseCommand implements Listener {
                 nowPlayer.getPlayerName() + "の合計スコアは" + nowPlayer.getSumScore() + "点！",
                 0, 100, 0);
 
-            playerScoreData.insert(new PlayerScore(nowPlayer.getPlayerName(), isDifficulty.preparedDifficulty(), nowPlayer.getSumScore()));
+            playerScoreData.insert(new PlayerScore(nowPlayer.getPlayerName(), isDifficulty.getClass(), nowPlayer.getSumScore()));
 
             entityList.forEach(Entity::remove);
             getPairIdList.clear();
@@ -314,5 +305,4 @@ public class GameStartCommand extends BaseCommand implements Listener {
     getPairIdList.clear();
     getEntityIdList.clear();
   }
-}
 }

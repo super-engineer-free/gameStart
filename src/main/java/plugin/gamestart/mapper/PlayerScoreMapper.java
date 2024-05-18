@@ -14,5 +14,5 @@ public abstract class PlayerScoreMapper<PlayerScore> {
 
   @Insert("insert player_score(player_name, difficulty, score,"
       + " registered_dt) values(#{playerName}, #{difficulty}, #{score}, now())")
-  public abstract int insert(PlayerScore playerScore) ;
+  public abstract void insert(PlayerScore playerScore) ;
 }

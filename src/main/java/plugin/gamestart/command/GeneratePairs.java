@@ -76,4 +76,7 @@ public class GeneratePairs {
     return getSelectIdNumber();
   }
 
+  public int getSelectLocationNumber() {
+    return getSelectIdNumber();
+  }
 }

@@ -18,7 +18,7 @@ public class GameEntityPosition {
     this.player = player;
 
     int i;
-    for (i = 0; i <= isDifficulty.getLoopCount_entityPosition(); i++) {
+    for (i = 0; i <= isDifficulty.getValue(); i++) {
       entityPositionListX.add(i);
       entityPositionListZ.add(i);
     }
